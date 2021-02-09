@@ -11,7 +11,7 @@ import OtherProfile from "./components/OtherProfile";
 import FeedPage from "./components/FeedPage";
 import SignIn from "./components/SignIn";
 import Register from "./components/Register";
-
+import Messanger from "./components/Messanger"
 const exclusionArray = ["/", "/register"];
 
 class App extends React.Component {
@@ -21,7 +21,7 @@ class App extends React.Component {
         {exclusionArray.indexOf(this.props.location.pathname) < 0 && (
           <NavbarApp />
         )}
-
+         <Route path = "/messanger" exact component = {Messanger} />
         <Route path="/me" exact component={ProfilePage} />
         <Route path="/profile/:id" component={OtherProfile} />
         <Route path="/feed" exact render={(props) => <FeedPage {...props} />} />

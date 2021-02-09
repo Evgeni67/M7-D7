@@ -1,0 +1,24 @@
+.chatContainer {
+    margin-top: 100px;
+  border: 1px black solid;
+  border-radius: 15px;
+  height:80%;
+  position: relative
+}
+#feedRightColumn {
+  margin-right: 20px;
+}
+.chatForm{
+  position: absolute;
+  bottom:0
+}
+.messagesRow{
+    height:92%
+}
+.chatCol{
+    border-right: 1px solid black;
+}
+#chat{
+    position: absolute;
+    bottom:0
+}

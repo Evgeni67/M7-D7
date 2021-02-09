@@ -105,6 +105,7 @@ class NavbarApp extends React.Component {
               </h5>
             </div>
             <div className="navbar-msg mx-3 text-center">
+              <Link to="/messanger">
               <AiFillMessage className="icon" />
               <h5
                 style={{
@@ -116,6 +117,7 @@ class NavbarApp extends React.Component {
               >
                 Messages
               </h5>
+              </Link>
             </div>
             <div className="navbar-notifications mx-3 text-center">
               <IoMdNotifications className="icon" />
