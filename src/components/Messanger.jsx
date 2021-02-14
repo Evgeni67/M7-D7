@@ -6,7 +6,7 @@ import io from "socket.io-client";
 class Messanger extends React.Component {
   socket = "null";
   state = {
-    user: "Evgeni",
+    user: "600ee173181ae757988fcc69",
     message: "",
     messages: [],
     users: [],
