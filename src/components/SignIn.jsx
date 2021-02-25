@@ -18,6 +18,7 @@ class SignIn extends React.Component {
   };
 
   fetchProfileId = async (e) => {
+    console.log("are be")
     e.preventDefault();
     try {
       let response = await fetch(

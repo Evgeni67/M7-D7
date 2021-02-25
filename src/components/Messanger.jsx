@@ -10,6 +10,7 @@ class Messanger extends React.Component {
     message: "",
     messages: [],
     users: [],
+    selectedUser: "",
   };
   handleMessage = async (e) => {
     this.setState({ message: e.currentTarget.value });
@@ -23,31 +24,37 @@ class Messanger extends React.Component {
     await this.socket.on("list", (list) => this.setState({ users: list }));
     console.log("users", this.state.users);
   };
+
   componentDidMount = async () => {
     const connOpt = {
       transports: ["websocket"],
     };
     try {
-      
       this.socket = io("https://striveschool-api.herokuapp.com/", connOpt);
 
       await this.socket.on("connect", () => console.log("connected to socket"));
-      await this.socket.emit("setUsername", { username: "Genata" });
+      await this.socket.emit("setUsername", { username: "Evgeni" });
       await this.socket.on("list", (list) => this.setState({ users: list }));
-      await this.socket.on("bmsg", (msg) =>
+      await this.socket.on("chatmessage", (msg) =>
         this.setState({ messages: this.state.messages.concat(msg) })
       );
+
       console.log("Logged");
     } catch (e) {
       console.log("Error logging in the chat", e);
     }
   };
+  // 3) event name: "chatmessage"
+  // payload ({
+  //     to: "receiver username",
+  //     text: "the message to be sent"
+  // }) SENDS A PRIVATE MESSAGE TO A SPECIFIC USER
   sendMessage = (e) => {
     e.preventDefault();
     if (this.state.message !== "") {
-      this.socket.emit("bmsg", {
-        user: this.state.user,
-        message: this.state.message,
+      this.socket.emit("chatmessage", {
+        to: this.state.selectedUser, //abdul1
+        text: this.state.message,
       });
       this.setState({
         message: "",
@@ -62,26 +69,29 @@ class Messanger extends React.Component {
           <Col sm={6}>
             <Container className="chatContainer">
               <Row className="d-flex justify-content-end">
-                <Col sm={4} className="chatCol">
+                <Col sm={4} className="chatCol ">
                   {" "}
                   {this.state.users.map((user) => (
-                    <Row>{user}</Row>
+                    <Row className = "d-flex justify-content-center" onClick={() => this.setState({ selectedUser: user })}>
+                      {user}   🟢
+                    </Row>
                   ))}
                 </Col>
                 <Col sm={4} className="chatCol">
                   {" "}
                   {this.state.messages.map((message) => (
                     <Row>
-                      {message.user} : {message.message}
+                     <p>private from - {message.to} : {message.msg} </p>
                     </Row>
                   ))}
                   <form id="chat" onSubmit={(e) => this.sendMessage(e)}>
                     <input
+                    className = "inputForm"
                       autoComplete="off"
                       value={this.state.message}
                       onChange={(e) => this.handleMessage(e)}
                     />
-                    <button>Send</button>
+                    <button className = "sendBtn">Send</button>
                   </form>
                 </Col>
                 <Col sm={4}> </Col>{" "}

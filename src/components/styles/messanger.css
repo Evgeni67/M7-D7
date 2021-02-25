@@ -2,13 +2,20 @@
     margin-top: 100px;
   border: 1px black solid;
   border-radius: 15px;
-  height:80%;
   position: relative
+}
+.sendBtn{
+  width:96%;
+  border-radius:0px 0px 10px 10px
 }
 #feedRightColumn {
   margin-right: 20px;
 }
+.inputForm{
+  width:96%;
+}
 .chatForm{
+  
   position: absolute;
   bottom:0
 }
@@ -19,6 +26,5 @@
     border-right: 1px solid black;
 }
 #chat{
-    position: absolute;
-    bottom:0
+    
 }
