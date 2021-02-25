@@ -8,6 +8,9 @@
   width:96%;
   border-radius:0px 0px 10px 10px
 }
+.private{
+  color:red
+}
 #feedRightColumn {
   margin-right: 20px;
 }

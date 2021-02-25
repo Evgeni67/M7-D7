@@ -33,7 +33,7 @@ class Messanger extends React.Component {
       this.socket = io("https://striveschool-api.herokuapp.com/", connOpt);
 
       await this.socket.on("connect", () => console.log("connected to socket"));
-      await this.socket.emit("setUsername", { username: "Evgeni" });
+      await this.socket.emit("setUsername", { username: "Evgeni3" });
       await this.socket.on("list", (list) => this.setState({ users: list }));
       await this.socket.on("chatmessage", (msg) =>
         this.setState({ messages: this.state.messages.concat(msg) })
@@ -54,7 +54,16 @@ class Messanger extends React.Component {
     if (this.state.message !== "") {
       this.socket.emit("chatmessage", {
         to: this.state.selectedUser, //abdul1
+        from: "YOU",
         text: this.state.message,
+      });
+      this.setState({
+        messages: this.state.messages.concat({
+          to: this.state.selectedUser,
+          from: "YOU",
+          msg: this.state.message,
+          iAmSendingThis: true,
+        }),
       });
       this.setState({
         message: "",
@@ -72,8 +81,11 @@ class Messanger extends React.Component {
                 <Col sm={4} className="chatCol ">
                   {" "}
                   {this.state.users.map((user) => (
-                    <Row className = "d-flex justify-content-center" onClick={() => this.setState({ selectedUser: user })}>
-                      {user}   🟢
+                    <Row
+                      className="d-flex justify-content-center"
+                      onClick={() => this.setState({ selectedUser: user })}
+                    >
+                      {user} 🟢
                     </Row>
                   ))}
                 </Col>
@@ -81,17 +93,28 @@ class Messanger extends React.Component {
                   {" "}
                   {this.state.messages.map((message) => (
                     <Row>
-                     <p>private from - {message.to} : {message.msg} </p>
+                      {message.hasOwnProperty("iAmSendingThis") ? (
+                        <p>
+                          <h className="private">private</h> to - {message.to} :{" "}
+                          {message.msg}{" "}
+                        </p>
+                      ) : (
+                        <p>
+                          private from -{" "}
+                          {typeof message.from === undefined ? <a>me</a> : ""} :{" "}
+                          {message.msg}{" "}
+                        </p>
+                      )}
                     </Row>
                   ))}
                   <form id="chat" onSubmit={(e) => this.sendMessage(e)}>
                     <input
-                    className = "inputForm"
+                      className="inputForm"
                       autoComplete="off"
                       value={this.state.message}
                       onChange={(e) => this.handleMessage(e)}
                     />
-                    <button className = "sendBtn">Send</button>
+                    <button className="sendBtn">Send</button>
                   </form>
                 </Col>
                 <Col sm={4}> </Col>{" "}
