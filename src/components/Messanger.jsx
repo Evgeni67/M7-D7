@@ -11,24 +11,36 @@ class Messanger extends React.Component {
     messages: [],
     users: [],
   };
-  handleMessage = (e) => {
+  handleMessage = async (e) => {
     this.setState({ message: e.currentTarget.value });
     console.log("msgs", this.state.messages);
-    console.log("users", this.state.users);
-  };
-  componentDidMount = () => {
+
     const connOpt = {
       transports: ["websocket"],
     };
-
     this.socket = io("https://striveschool-api.herokuapp.com/", connOpt);
+    await this.socket.on("connect", () => console.log("connected to socket"));
+    await this.socket.on("list", (list) => this.setState({ users: list }));
+    console.log("users", this.state.users);
+  };
+  componentDidMount = async () => {
+    const connOpt = {
+      transports: ["websocket"],
+    };
+    try {
+      
+      this.socket = io("https://striveschool-api.herokuapp.com/", connOpt);
 
-    this.socket.on("list", (users) =>
-      this.setState({ users: this.state.users.concat(users).slice(0, 18) })
-    );
-    this.socket.on("bmsg", (msg) =>
-      this.setState({ messages: this.state.messages.concat(msg) })
-    );
+      await this.socket.on("connect", () => console.log("connected to socket"));
+      await this.socket.emit("setUsername", { username: "Genata" });
+      await this.socket.on("list", (list) => this.setState({ users: list }));
+      await this.socket.on("bmsg", (msg) =>
+        this.setState({ messages: this.state.messages.concat(msg) })
+      );
+      console.log("Logged");
+    } catch (e) {
+      console.log("Error logging in the chat", e);
+    }
   };
   sendMessage = (e) => {
     e.preventDefault();
@@ -63,8 +75,7 @@ class Messanger extends React.Component {
                       {message.user} : {message.message}
                     </Row>
                   ))}
-                 
-                    <form id="chat" onSubmit={(e) => this.sendMessage(e)}>
+                  <form id="chat" onSubmit={(e) => this.sendMessage(e)}>
                     <input
                       autoComplete="off"
                       value={this.state.message}
@@ -73,10 +84,7 @@ class Messanger extends React.Component {
                     <button>Send</button>
                   </form>
                 </Col>
-                <Col sm={4}>
-                  {" "}
-                
-                </Col>{" "}
+                <Col sm={4}> </Col>{" "}
               </Row>
             </Container>{" "}
           </Col>{" "}
